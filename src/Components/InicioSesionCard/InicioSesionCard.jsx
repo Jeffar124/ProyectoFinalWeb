@@ -1,27 +1,16 @@
-import React, { useState } from 'react'
-import './InicioSesionCard.css'
-import { Link, useNavigate } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from 'react';
+import './InicioSesionCard.css';
+import { Link } from 'react-router-dom';
 
-const InicioSesionCard = () => {
+// Recibe la función de acción y un posible mensaje de error externo como props
+const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const auth = getAuth();
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                navigate('/')
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-            });
+        // Le pasa las credenciales a la Página contenedora
+        onLoginSubmit(email, password); 
     };
 
     return (
@@ -31,6 +20,9 @@ const InicioSesionCard = () => {
                     <h2>Bienvenido</h2>
                     <p>Ingresa tus credenciales para acceder</p>
                 </div>
+
+                {/* Si la página detecta un error de Firebase, lo mostramos aquí */}
+                {errorServidor && <p className="error-message">{errorServidor}</p>}
 
                 <form onSubmit={handleSubmit} className="login-form">
                     <div className="form-group">
@@ -67,11 +59,12 @@ const InicioSesionCard = () => {
                 </form>
 
                 <div className="login-footer">
-                    <p>¿No tienes una cuenta? <a href="#register">Regístrate</a></p>
+                    {/* TIP: Cambia los <a href> por <Link to> de react-router-dom para evitar recargar la página */}
+                    <p>¿No tienes una cuenta? <Link to="/registro">Regístrate</Link></p>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default InicioSesionCard
+export default InicioSesionCard;
