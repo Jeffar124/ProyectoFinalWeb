@@ -1,13 +1,34 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { getAuth, signOut } from "firebase/auth";
+import { useAuth } from '../../Context/AuthProvider';
 
 const PanelUsuario = () => {
+  const auth = getAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+      // Cierre de sesión exitoso
+      console.log("Sesión cerrada correctamente");
+      navigate('/')
+    }).catch((error) => {
+      // Ocurrió un error
+      console.error("Error al cerrar sesión: ", error);
+    });
+  };
+
   return (
     <div>
       <h1>PanelUsuario</h1>
+      <h1>Bienvenido {user ? user.nombre : "Usuario"}</h1>
       <Link to="/registrarincidente">Registrar Incidente</Link>
       <Link to="/incidentesusuario">Mis Reportes</Link>
-      </div>
+      <br />
+
+      <button onClick={handleSignOut}>Cerrar Sesion</button>
+    </div>
 
   )
 }
