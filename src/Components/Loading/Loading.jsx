@@ -1,11 +1,10 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-const Loading = () => {
+export default function Loadin() {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <CircularProgress aria-label="Loading…" size={60} />
+            <CircularProgress aria-label="Loading…" />
         </Box>
     );
-};
-export default Loading;
+}

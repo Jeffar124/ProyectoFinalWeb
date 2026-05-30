@@ -1,12 +1,12 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthProvider';
-import Loading from '../Loading/Loading';
+import SimpleSidebar from '../Sidebar/Sidebar';
 
 const ProtectedRoute = ({ allowedRoles }) => {
     const { user, loading } = useAuth();
 
     if (loading) {
-        return <Loading />;
+        return <SimpleSidebar />;
     }
 
     if (!user || !allowedRoles.includes(user.rol)) {

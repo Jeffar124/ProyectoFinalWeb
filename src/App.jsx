@@ -22,7 +22,7 @@ function App() {
             <Route path='/registro' element={<Registro />} />
             <Route path='/iniciosesion' element={<InicioSesion />} />
 
-            <Route element={<ProtectedRoute allowedRoles={["Usuario", "Administrador"]} />}>
+            <Route element={<ProtectedRoute allowedRoles={["Usuario"]} />}>
               <Route path='/panelusuario' element={<PanelUsuario />} />
               <Route path='/registrarincidente' element={<RegistrarIncidente />} />
               <Route path='/incidentesusuario' element={<IncidentesUsuario />} />

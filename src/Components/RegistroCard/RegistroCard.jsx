@@ -3,8 +3,10 @@ import { app, auth, db } from "../../Firebase/config.js";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import './RegistroCard.css'
+import { useNavigate } from 'react-router-dom';
 
 const RegistroCard = () => {
+    const navigate = useNavigate();
     const [formulario, setFormulario] = useState({
         nombre: "",
         correo: "",
@@ -36,7 +38,7 @@ const RegistroCard = () => {
                 correo: formulario.correo,
                 rol: "Usuario",
             });
-
+            navigate('/panelusuario')
         } catch (error) {
             console.log(error.code);
             console.log(error.message);
