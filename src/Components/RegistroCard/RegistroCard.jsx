@@ -87,6 +87,7 @@ const RegistroCard = () => {
 
                     <button type="submit" className="btn-registro">
                         Registrarse
+                        
                     </button>
                 </form>
             </div>

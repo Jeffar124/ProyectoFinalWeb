@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from "firebase/auth";
 import { useAuth } from '../../Context/AuthProvider';
 
@@ -22,6 +22,7 @@ const PanelAdmin = () => {
         <div>
             <h1>Panel Admin</h1>
             <h2>Bienvenido {user ? user.nombre : "Administrador"}</h2>
+            <Link to='/estadisticas'>Estadisticas</Link>
             <button onClick={handleSignOut}>Cerrar Sesion</button>
         </div>
     )

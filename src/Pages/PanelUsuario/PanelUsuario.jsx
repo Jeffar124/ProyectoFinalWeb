@@ -25,6 +25,7 @@ const PanelUsuario = () => {
       <h1>Bienvenido {user ? user.nombre : "Usuario"}</h1>
       <Link to="/registrarincidente">Registrar Incidente</Link>
       <Link to="/incidentesusuario">Mis Reportes</Link>
+      <Link to='/estadisticas'>Estadisticas</Link>
       <br />
 
       <button onClick={handleSignOut}>Cerrar Sesion</button>
