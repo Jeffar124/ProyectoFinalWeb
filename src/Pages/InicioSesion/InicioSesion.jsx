@@ -13,7 +13,7 @@ const InicioSesion = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Inicio de sesión exitoso, redirigimos a la raíz
-                navigate('/');
+                navigate("/panelusuario");
             })
             .catch((error) => {
                 // Controlamos los errores que vienen del servidor de Firebase
