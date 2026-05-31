@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../Context/AuthProvider';
+import GraficoIncidentes from '../../Components/GraficoIncidentes/GraficoIncidentes';
 
 const Estadisticas = () => {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ const Estadisticas = () => {
       <button onClick={handleVolver}>
         volver
       </button>
+      <div>
+        <GraficoIncidentes></GraficoIncidentes>
+      </div>
     </div>
   )
 }

@@ -10,6 +10,7 @@ import IncidentesUsuario from './Pages/IncidentesUsuario/IncidentesUsuario.jsx'
 import PanelAdmin from './Pages/PanelAdmin/PanelAdmin.jsx'
 import { AuthProvider } from './Context/AuthProvider.jsx'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute.jsx'
+import Estadisticas from './Pages/Estadisticas/Estadisticas.jsx'
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
               <Route path='/panelusuario' element={<PanelUsuario />} />
               <Route path='/registrarincidente' element={<RegistrarIncidente />} />
               <Route path='/incidentesusuario' element={<IncidentesUsuario />} />
+              <Route path='/estadisticas' element={<Estadisticas />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedRoles={["Administrador"]} />}>

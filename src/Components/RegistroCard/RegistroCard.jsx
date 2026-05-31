@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { app, auth, db } from "../../Firebase/config.js";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
 import './RegistroCard.css'
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const RegistroCard = () => {
-    const navigate = useNavigate();
+const RegistroCard = ({ onRegisterSubmit, errorServidor}) => {
     const [formulario, setFormulario] = useState({
         nombre: "",
         correo: "",
@@ -22,36 +18,15 @@ const RegistroCard = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                formulario.correo,
-                formulario.contraseña
-            );
-
-            const user = userCredential.user;
-
-            console.log(user);
-
-            await setDoc(doc(db, "usuarios", user.uid), {
-                nombre: formulario.nombre,
-                correo: formulario.correo,
-                rol: "Usuario",
-            });
-            navigate('/panelusuario')
-        } catch (error) {
-            console.log(error.code);
-            console.log(error.message);
-        }
+        onRegisterSubmit(formulario.nombre, formulario.correo, formulario.contraseña);
     };
-
-
-
 
     return (
         <>
             <div className="registro-card">
                 <h2 className="titulo">Registro</h2>
+
+                {errorServidor && <p className='error-message'>{errorServidor}</p>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="grupo-input">
@@ -91,6 +66,9 @@ const RegistroCard = () => {
                         Registrarse
                     </button>
                 </form>
+                <div>
+                    <p>¿Ya tienes una cuenta? <Link to={"/iniciosesion"}>Inicia Sesión</Link></p>
+                </div>
             </div>
         </>
     )
