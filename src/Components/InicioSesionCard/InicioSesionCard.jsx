@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import './InicioSesionCard.css';
 import { Link } from 'react-router-dom';
 
-// Recibe la función de acción y un posible mensaje de error externo como props
 const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Le pasa las credenciales a la Página contenedora
         onLoginSubmit(email, password); 
     };
 
@@ -21,7 +19,6 @@ const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
                     <p>Ingresa tus credenciales para acceder</p>
                 </div>
 
-                {/* Si la página detecta un error de Firebase, lo mostramos aquí */}
                 {errorServidor && <p className="error-message">{errorServidor}</p>}
 
                 <form onSubmit={handleSubmit} className="login-form">
@@ -59,7 +56,6 @@ const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
                 </form>
 
                 <div className="login-footer">
-                    {/* TIP: Cambia los <a href> por <Link to> de react-router-dom para evitar recargar la página */}
                     <p>¿No tienes una cuenta? <Link to="/registro">Regístrate</Link></p>
                 </div>
             </div>
