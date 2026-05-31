@@ -22,6 +22,7 @@ const PanelAdmin = () => {
         <div>
             <h1>Panel Admin</h1>
             <h2>Bienvenido {user ? user.nombre : "Administrador"}</h2>
+            {console.log(user)}
             <button onClick={handleSignOut}>Cerrar Sesion</button>
         </div>
     )

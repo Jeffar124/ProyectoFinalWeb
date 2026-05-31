@@ -8,6 +8,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
     if (loading) {
         return <Loading />;
+        return <Loading />;
     }
 
     if (!user || !allowedRoles.includes(user.rol)) {
