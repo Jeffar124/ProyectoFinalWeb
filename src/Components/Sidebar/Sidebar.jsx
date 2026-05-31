@@ -64,7 +64,7 @@ export default function SimpleSidebar({ children }) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Mi Aplicación
+                        Uniamazonia Reporta
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -107,7 +107,7 @@ export default function SimpleSidebar({ children }) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                {children || <Typography>Selecciona una opción del menú.</Typography>}
+                {children}
             </Box>
         </Box>
     );
