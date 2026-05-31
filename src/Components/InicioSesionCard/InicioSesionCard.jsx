@@ -10,7 +10,7 @@ const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Le pasa las credenciales a la Página contenedora
-        onLoginSubmit(email, password); 
+        onLoginSubmit(email, password);
     };
 
     return (
@@ -59,7 +59,6 @@ const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
                 </form>
 
                 <div className="login-footer">
-                    {/* TIP: Cambia los <a href> por <Link to> de react-router-dom para evitar recargar la página */}
                     <p>¿No tienes una cuenta? <Link to="/registro">Regístrate</Link></p>
                 </div>
             </div>
