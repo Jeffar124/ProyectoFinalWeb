@@ -67,7 +67,7 @@ const RegistroCard = ({ onRegisterSubmit, errorServidor}) => {
                     </button>
                 </form>
                 <div>
-                    <p>¿Ya tienes una cuenta? <Link to={"/iniciosesion"}>Inicia Sesión</Link></p>
+                    <p>¿Ya tienes una cuenta creada? <Link to={"/iniciosesion"}>Inicia Sesión</Link></p>
                 </div>
             </div>
         </>
