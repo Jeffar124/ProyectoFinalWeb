@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAuth, signOut } from "firebase/auth";
 import { useAuth } from '../../Context/AuthProvider';
+import SimpleSidebar from '../../Components/Sidebar/Sidebar';
 
 const PanelUsuario = () => {
   const auth = getAuth();
@@ -21,14 +22,16 @@ const PanelUsuario = () => {
 
   return (
     <div>
-      <h1>PanelUsuario</h1>
-      <h1>Bienvenido {user ? user.nombre : "Usuario"}</h1>
-      <Link to="/registrarincidente">Registrar Incidente</Link>
-      <Link to="/incidentesusuario">Mis Reportes</Link>
-      <Link to='/estadisticas'>Estadisticas</Link>
+      <SimpleSidebar>
+        <h1>PanelUsuario</h1>
+        <h1>Bienvenido {user ? user.nombre : "Usuario"}</h1>
+        <Link to="/registrarincidente">Registrar Incidente</Link>
+        <Link to="/incidentesusuario">Mis Reportes</Link>
+        <Link to='/estadisticas'>Estadisticas</Link>
       <br />
 
-      <button onClick={handleSignOut}>Cerrar Sesion</button>
+        <button onClick={handleSignOut}>Cerrar Sesion</button>
+      </SimpleSidebar>
     </div>
 
   )

@@ -22,13 +22,18 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/registro' element={<Registro />} />
             <Route path='/iniciosesion' element={<InicioSesion />} />
-            <Route element={<ProtectedRoute />}>
+
+            <Route element={<ProtectedRoute allowedRoles={["Usuario"]} />}>
               <Route path='/panelusuario' element={<PanelUsuario />} />
-              <Route path='/paneladmin' element={<PanelAdmin />} />
               <Route path='/registrarincidente' element={<RegistrarIncidente />} />
               <Route path='/incidentesusuario' element={<IncidentesUsuario />} />
               <Route path='/estadisticas' element={<Estadisticas />} />
             </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={["Administrador"]} />}>
+              <Route path='/paneladmin' element={<PanelAdmin />} />
+            </Route>
+
           </Routes>
         </AuthProvider>
       </Router>

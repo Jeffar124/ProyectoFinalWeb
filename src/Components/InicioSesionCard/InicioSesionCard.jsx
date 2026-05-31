@@ -8,7 +8,8 @@ const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onLoginSubmit(email, password); 
+        // Le pasa las credenciales a la Página contenedora
+        onLoginSubmit(email, password);
     };
 
     return (
