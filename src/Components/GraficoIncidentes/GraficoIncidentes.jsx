@@ -1,111 +1,258 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../Firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
-import {
-    BarChart, Bar,
-    LineChart, Line,
-    XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+import { format, startOfWeek, endOfWeek } from 'date-fns';
+import { es } from 'date-fns/locale'; // Para nombres de meses/días en español
+import { 
+  BarChart, Bar, 
+  PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
 } from 'recharts';
+import './GraficoIncidentes.css';
+
+// Configuración estricta de tipos de incidencias requeridos
+const TIPOS_VALIDOS = [
+  'Infraestructura', 
+  'Electricidad', 
+  'Equipos Informaticos', 
+  'Mobiliario', 
+  'Aseo', 
+  'Areas Verdes', 
+  'Otros'
+];
+
+const COLORES_ESTADO = {
+  'Reportado': '#ef4444',
+  'En proceso': '#f59e0b',
+  'Resuelto': '#10b981'
+};
+
+// Paleta fija para los 7 tipos de incidencias
+const COLORES_TIPOS = ['#6366f1', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#14b8a6', '#64748b'];
 
 export default function GraficoIncidentes() {
-    const [datosGrafico, setDatosGrafico] = useState([]);
-    const [total, setTotal] = useState(0);
+  const [incidentes, setIncidentes] = useState([]);
+  
+  // Filtros de periodo
+  const [tipoPeriodo, setTipoPeriodo] = useState('meses'); // dias, semanas, meses, anos
+  const [valorPeriodo, setValorPeriodo] = useState('Todos');
+  const [opcionesPeriodo, setOpcionesPeriodo] = useState([]);
 
-    useEffect(() => {
-        // 1. Referenciamos la colección
-        const coleccionUsuarios = collection(db, 'usuarios');
+  // KPIs y datos formateados
+  const [totalIncidentes, setTotalIncidentes] = useState(0);
+  const [datosEstado, setDatosEstado] = useState([]);
+  const [datosTipo, setDatosTipo] = useState([]);
 
-        // 2. Escuchamos en tiempo real con onSnapshot
-        const desuscribir = onSnapshot(coleccionUsuarios, (querySnapshot) => {
-            const listaUsuarios = [];
+  useEffect(() => {
+    const coleccionIncidentes = collection(db, 'incidentes');
 
-            querySnapshot.forEach((doc) => {
-                listaUsuarios.push(doc.data());
-            });
+    const desuscribir = onSnapshot(coleccionIncidentes, (querySnapshot) => {
+      const lista = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        let fechaObjeto = null;
 
-            // Procesamos los datos y actualizamos los estados
-            procesarRoles(listaUsuarios);
-            setTotal(listaUsuarios.length);
-        }, (error) => {
-            console.error("Error en tiempo real: ", error);
+        if (data.fechaCreacion) {
+          fechaObjeto = data.fechaCreacion.seconds 
+            ? new Date(data.fechaCreacion.seconds * 1000) 
+            : new Date(data.fechaCreacion);
+        }
+
+        lista.push({ 
+          id: doc.id, 
+          ...data, 
+          fechaObjeto: isNaN(fechaObjeto) ? null : fechaObjeto 
         });
+      });
 
-        // 3. LIMPIEZA (Mucha atención aquí):
-        // Cuando el componente se desmonte (te vayas a otra página), 
-        // cancelamos la escucha para no consumir memoria ni lecturas de Firebase de más.
-        return () => desuscribir();
-    }, []);
+      setIncidentes(lista);
+    }, (error) => {
+      console.error("Error en tiempo real: ", error);
+    });
 
-    const procesarRoles = (usuarios) => {
-        // Inicializamos el conteo
-        const conteo = {
-            Usuario: 0,
-            Administrador: 0
-        };
+    return () => desuscribir();
+  }, []);
 
-        // Recorremos los usuarios y sumamos según el rol
-        usuarios.forEach(u => {
-            if (u.rol === 'Usuario') conteo.Usuario++;
-            if (u.rol === 'Administrador') conteo.Administrador++;
-        });
+  // Recalcular las opciones del segundo selector cuando cambia el tipo de periodo o los datos
+  useEffect(() => {
+    const opcionesSet = new Set();
 
-        // Convertimos a formato Recharts
-        const dataFormateada = [
-            { name: 'Usuarios', cantidad: conteo.Usuario },
-            { name: 'Administradores', cantidad: conteo.Administrador },
-        ];
+    incidentes.forEach(i => {
+      if (!i.fechaObjeto) return;
 
-        setDatosGrafico(dataFormateada);
-    };
+      if (tipoPeriodo === 'dias') {
+        opcionesSet.add(format(i.fechaObjeto, 'dd-MM-yyyy'));
+      } 
+      else if (tipoPeriodo === 'semanas') {
+        const inicio = format(startOfWeek(i.fechaObjeto), 'dd/MM');
+        const fin = format(endOfWeek(i.fechaObjeto), 'dd/MM/yyyy');
+        opcionesSet.add(`Semana ${inicio} al ${fin}`);
+      } 
+      else if (tipoPeriodo === 'meses') {
+        opcionesSet.add(format(i.fechaObjeto, 'MM-yyyy (MMMM)', { locale: es }));
+      } 
+      else if (tipoPeriodo === 'anos') {
+        opcionesSet.add(format(i.fechaObjeto, 'yyyy'));
+      }
+    });
 
-    return (
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+    const opcionesOrdenadas = Array.from(opcionesSet).sort().reverse();
+    setOpcionesPeriodo(['Todos', ...opcionesOrdenadas]);
+    setValorPeriodo('Todos'); // Resetear al cambiar de magnitud temporal
+  }, [incidentes, tipoPeriodo]);
 
-            <div style={{ textAlign: 'center' }}>
-                <h2 style={{ color: '#333' }}>Prueba de Estadísticas: Roles de Usuarios</h2>
-                <p>Total de usuarios registrados: <strong>{total}</strong></p>
-            </div>
+  // Filtrar y calcular estadísticas (RF-11)
+  useEffect(() => {
+    const filtrados = incidentes.filter(i => {
+      if (valorPeriodo === 'Todos') return true;
+      if (!i.fechaObjeto) return false;
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', minHeight: '350px' }}>
+      if (tipoPeriodo === 'dias') {
+        return format(i.fechaObjeto, 'dd-MM-yyyy') === valorPeriodo;
+      }
+      if (tipoPeriodo === 'semanas') {
+        const inicio = format(startOfWeek(i.fechaObjeto), 'dd/MM');
+        const fin = format(endOfWeek(i.fechaObjeto), 'dd/MM/yyyy');
+        return `Semana ${inicio} al ${fin}` === valorPeriodo;
+      }
+      if (tipoPeriodo === 'meses') {
+        return format(i.fechaObjeto, 'MM-yyyy (MMMM)', { locale: es }) === valorPeriodo;
+      }
+      if (tipoPeriodo === 'anos') {
+        return format(i.fechaObjeto, 'yyyy') === valorPeriodo;
+      }
+      return true;
+    });
 
-                {/* GRÁFICO DE BARRAS */}
-                <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-                    <h4 style={{ textAlign: 'center' }}>Distribución (Barras)</h4>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={datosGrafico}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="cantidad" fill="#4f46e5" radius={[4, 4, 0, 0]} name="Cant. Personas" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
+    setTotalIncidentes(filtrados.length);
 
-                {/* GRÁFICO LINEAL */}
-                <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-                    <h4 style={{ textAlign: 'center' }}>Tendencia de Roles (Lineal)</h4>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={datosGrafico}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Line
-                                type="monotone"
-                                dataKey="cantidad"
-                                stroke="#10b981"
-                                strokeWidth={3}
-                                dot={{ r: 6 }}
-                                name="Cant. Personas"
-                            />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
+    // 1. Agrupación por Estado
+    const conteoEstado = { 'Reportado': 0, 'En proceso': 0, 'Resuelto': 0 };
+    filtrados.forEach(i => {
+      const est = i.estado || 'Reportado';
+      if (conteoEstado[est] !== undefined) conteoEstado[est]++;
+    });
+    setDatosEstado(Object.keys(conteoEstado).map(key => ({
+      name: key,
+      cantidad: conteoEstado[key],
+      color: COLORES_ESTADO[key]
+    })));
 
-            </div>
+    // 2. Agrupación por Tipo (Asegurando tus categorías exactas)
+    const conteoTipo = {};
+    TIPOS_VALIDOS.forEach(t => conteoTipo[t] = 0); // Inicializar en 0
+
+    filtrados.forEach(i => {
+      let t = i.tipoIncidencia || 'Otros';
+      if (conteoTipo[t] !== undefined) {
+        conteoTipo[t]++;
+      } else {
+        conteoTipo['Otros']++;
+      }
+    });
+
+    setDatosTipo(Object.keys(conteoTipo).map(key => ({
+      name: key,
+      cantidad: conteoTipo[key]
+    })));
+
+  }, [incidentes, tipoPeriodo, valorPeriodo]);
+
+  return (
+    <div className="seccion-reporte">
+      
+      {/* Panel de Control de Filtros e Impresión */}
+      <div className="controles-reporte no-print">
+        <div>
+          
+          <div>
+            <label>Magnitud Temporal:</label>
+            <select value={tipoPeriodo} onChange={(e) => setTipoPeriodo(e.target.value)}>
+              <option value="dias">Días</option>
+              <option value="semanas">Semanas</option>
+              <option value="meses">Meses</option>
+              <option value="anos">Años</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Periodo Específico:</label>
+            <select value={valorPeriodo} onChange={(e) => setValorPeriodo(e.target.value)}>
+              {opcionesPeriodo.map(opc => (
+                <option key={opc} value={opc}>{opc}</option>
+              ))}
+            </select>
+          </div>
+
         </div>
-    );
+
+        <button onClick={() => window.print()}>
+            Imprimir Reporte
+        </button>
+      </div>
+
+      {/* Vista de Impresión */}
+      <div>
+        <div>
+          <h1>Reporte Estadístico del Sistema</h1>
+          <p>Filtrado por: <strong>{tipoPeriodo.toUpperCase()}</strong> — Detalle: <strong>{valorPeriodo}</strong></p>
+        </div>
+
+        <div>
+          <h3>Número Total de Incidentes</h3>
+          <p>{totalIncidentes}</p>
+        </div>
+
+        <div className="grid-reporte">
+          
+          {/* Gráfico 1: Por Estado */}
+          <div className="tarjeta-grafico">
+            <h3>Incidentes por Estado</h3>
+            <div className="contenedor-recharts">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={datosEstado}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="name" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="cantidad" name="Incidentes">
+                    {datosEstado.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Gráfico 2: Por Tipo */}
+          <div className="tarjeta-grafico">
+            <h3>Incidentes por Tipo</h3>
+            <div className="contenedor-recharts">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={datosTipo}
+                    dataKey="cantidad"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label={({ name, cantidad }) => cantidad > 0 ? `${name}: ${cantidad}` : ''}
+                  >
+                    {datosTipo.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORES_TIPOS[index % COLORES_TIPOS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend layout="horizontal" verticalAlign="bottom" align="center" wrapperStyle={{ fontSize: '11px' }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
 }
