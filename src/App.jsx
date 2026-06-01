@@ -11,6 +11,7 @@ import PanelAdmin from './Pages/PanelAdmin/PanelAdmin.jsx'
 import { AuthProvider } from './Context/AuthProvider.jsx'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute.jsx'
 import Estadisticas from './Pages/Estadisticas/Estadisticas.jsx'
+import DetalleIncidente from './Pages/DetalleIncidente/DetalleIncidente.jsx'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
 
             <Route element={<ProtectedRoute allowedRoles={["Usuario", "Administrador"]} />}>
               <Route path='/estadisticas' element={<Estadisticas />} />
+              <Route path='/detalleincidente/:id' element={<DetalleIncidente />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedRoles={["Administrador"]} />}>

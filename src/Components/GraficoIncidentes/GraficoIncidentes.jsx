@@ -207,7 +207,7 @@ export default function GraficoIncidentes() {
           <p>{totalIncidentes}</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', minHeight: '350px' }}>
+        <div className='contenedor-graficos'>
 
           {/* Gráfico 1: Por Estado */}
           <div className="tarjeta-grafico">

@@ -221,6 +221,7 @@ const FormularioIncidente = ({ onRegisterIncidenceSubmit }) => {
                         >
                             {formulario.coords && formulario.coords.latitude !== 0 ? "Ubicación GPS Obtenida" : "Obtener Ubicación GPS"}
                         </Button>
+
                     </Box>
 
                     {/* Vista Previa de Imagen */}
@@ -267,7 +268,7 @@ const FormularioIncidente = ({ onRegisterIncidenceSubmit }) => {
                             }
                         }}
                     >
-                        Registrar Incidencia
+                        Registrar Incidente
                     </Button>
                 </Box>
             </form>

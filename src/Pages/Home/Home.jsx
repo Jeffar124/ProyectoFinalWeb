@@ -1,7 +1,7 @@
 import React from 'react'
 import {
     Container,
-    Grid,
+    Grid2 as Grid,
     Typography,
     Button,
     Box
@@ -22,24 +22,24 @@ const Home = () => {
                 mb: 8,
                 boxShadow: '0 10px 30px -10px rgba(13, 35, 58, 0.3)'
             }}>
-                <Typography 
-                    variant="h3" 
-                    sx={{ 
-                        fontWeight: 800, 
-                        mb: 2, 
-                        fontSize: { xs: '2.25rem', md: '3.5rem' }, 
-                        letterSpacing: '-0.025em' 
+                <Typography
+                    variant="h3"
+                    sx={{
+                        fontWeight: 800,
+                        mb: 2,
+                        fontSize: { xs: '2.25rem', md: '3.5rem' },
+                        letterSpacing: '-0.025em'
                     }}
                 >
                     Uniamazonia Reporta
                 </Typography>
-                <Typography 
-                    variant="h6" 
-                    sx={{ 
-                        color: '#93c5fd', 
-                        fontWeight: 400, 
-                        maxWidth: '650px', 
-                        mx: 'auto', 
+                <Typography
+                    variant="h6"
+                    sx={{
+                        color: '#93c5fd',
+                        fontWeight: 400,
+                        maxWidth: '650px',
+                        mx: 'auto',
                         fontSize: { xs: '1rem', md: '1.25rem' },
                         lineHeight: 1.6
                     }}

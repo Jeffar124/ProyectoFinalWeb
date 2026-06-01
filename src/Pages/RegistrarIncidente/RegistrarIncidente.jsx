@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import FormularioIncidente from '../../Components/FormularioIncidente/FormularioIncidente'
 import { imageDB, db } from '../../Firebase/config'
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -14,6 +14,7 @@ import { Box, Container, Typography } from '@mui/material';
 const RegistrarIncidente = () => {
   const auth = getAuth();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const HandleRegistrarIncidente = async (tipoIncidencia, descripcion, ubicacion, imagen, coords) => {
     try {
@@ -32,6 +33,7 @@ const RegistrarIncidente = () => {
         estado: 'Reportado'
       })
       alert("Incidente registrado con éxito.");
+      navigate('/panelusuario')
     } catch (error) {
       console.error("Error al registrar incidente:", error);
       alert("Hubo un error al registrar el incidente.");
