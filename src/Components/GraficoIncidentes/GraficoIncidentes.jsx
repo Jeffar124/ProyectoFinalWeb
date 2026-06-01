@@ -140,7 +140,6 @@ export default function GraficoIncidentes() {
       cantidad: conteoEstado[key],
       color: COLORES_ESTADO[key]
     })));
-    console.log(datosEstado);
 
 
     // 2. Agrupación por Tipo (Asegurando tus categorías exactas)
