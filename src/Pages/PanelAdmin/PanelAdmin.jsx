@@ -5,6 +5,7 @@ import { useAuth } from '../../Context/AuthProvider';
 import SimpleSidebar from '../../Components/Sidebar/Sidebar';
 import { Box, Container, Typography, Grid, Card, CardContent, CardActionArea } from '@mui/material';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import { History } from '@mui/icons-material';
 
 const PanelAdmin = () => {
     const auth = getAuth();
@@ -21,6 +22,13 @@ const PanelAdmin = () => {
     };
 
     const accesosAdmin = [
+        {
+            titulo: 'Ver Incidentes',
+            descripcion: 'Consulta en forma de tabla todos los incidentes registrados en el sistema.',
+            link: '/incidentesadmin',
+            icon: <History sx={{ fontSize: 40, color: '#1e40af' }} />,
+            bgColor: '#eff6ff'
+        },
         {
             titulo: 'Ver Estadísticas',
             descripcion: 'Consulta gráficos interactivos de distribución de roles y tendencias del sistema.',
