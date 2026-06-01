@@ -24,13 +24,13 @@ const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
 
                 <form onSubmit={handleSubmit} className="login-form">
                     <div className="form-group">
-                        <label htmlFor="email">Correo Electrónico</label>
+                        <label htmlFor="email">Correo Institucional</label>
                         <input
                             type="email"
                             id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="correo@ejemplo.com"
+                            placeholder="usuario@uniamazonia.edu.co"
                             required
                         />
                     </div>

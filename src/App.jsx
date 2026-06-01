@@ -27,6 +27,9 @@ function App() {
               <Route path='/panelusuario' element={<PanelUsuario />} />
               <Route path='/registrarincidente' element={<RegistrarIncidente />} />
               <Route path='/incidentesusuario' element={<IncidentesUsuario />} />
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={["Usuario", "Administrador"]} />}>
               <Route path='/estadisticas' element={<Estadisticas />} />
             </Route>
 

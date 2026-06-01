@@ -22,43 +22,52 @@ const RegistroCard = ({ onRegisterSubmit, errorServidor}) => {
     };
 
     return (
-        <>
+        <div className="registro-container">
             <div className="registro-card">
-                <h2 className="titulo">Registro</h2>
+                <div className="registro-header">
+                    <h2>Crear Cuenta</h2>
+                    <p>Regístrate para reportar incidentes en tu campus</p>
+                </div>
 
                 {errorServidor && <p className='error-message'>{errorServidor}</p>}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="registro-form">
                     <div className="grupo-input">
-                        <label>Nombre Completo</label>
+                        <label htmlFor="nombre">Nombre Completo</label>
                         <input
                             type="text"
+                            id="nombre"
                             name="nombre"
                             value={formulario.nombre}
                             onChange={handleChange}
-                            placeholder="Ingrese su nombre"
+                            placeholder="Ingrese su nombre completo"
+                            required
                         />
                     </div>
 
                     <div className="grupo-input">
-                        <label>Correo</label>
+                        <label htmlFor="correo">Correo Institucional</label>
                         <input
                             type="email"
+                            id="correo"
                             name="correo"
                             value={formulario.correo}
                             onChange={handleChange}
-                            placeholder="Ingrese su correo"
+                            placeholder="usuario@uniamazonia.edu.co"
+                            required
                         />
                     </div>
 
                     <div className="grupo-input">
-                        <label>Contraseña</label>
+                        <label htmlFor="contraseña">Contraseña</label>
                         <input
                             type="password"
+                            id="contraseña"
                             name="contraseña"
                             value={formulario.contraseña}
                             onChange={handleChange}
-                            placeholder="Ingrese su contraseña"
+                            placeholder="••••••••"
+                            required
                         />
                     </div>
 
@@ -66,11 +75,11 @@ const RegistroCard = ({ onRegisterSubmit, errorServidor}) => {
                         Registrarse
                     </button>
                 </form>
-                <div>
+                <div className="registro-footer">
                     <p>¿Ya tienes una cuenta? <Link to={"/iniciosesion"}>Inicia Sesión</Link></p>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

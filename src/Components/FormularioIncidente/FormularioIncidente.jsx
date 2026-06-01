@@ -1,4 +1,4 @@
-import { Box, Button, MenuItem, TextField } from '@mui/material'
+import { Box, Button, MenuItem, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import PhotoCameraBackOutlinedIcon from '@mui/icons-material/PhotoCameraBackOutlined';
 import AddLocationAltOutlinedIcon from '@mui/icons-material/AddLocationAltOutlined';
@@ -91,83 +91,188 @@ const FormularioIncidente = ({ onRegisterIncidenceSubmit }) => {
 
     const handelSubmit = async (e) => {
         e.preventDefault();
-        onRegisterIncidenceSubmit(formulario.tipoIncidencia, formulario.descripcion, formulario.ubicacion, formulario.imagen, formulario.coords);
+        if (!formulario.tipoIncidencia) {
+            alert("Por favor selecciona un tipo de incidencia.");
+            return;
+        }
+        if (!formulario.imagen) {
+            alert("Por favor adjunta una fotografía como evidencia.");
+            return;
+        }
+        onRegisterSubmit(formulario.tipoIncidencia, formulario.descripcion, formulario.ubicacion, formulario.imagen, formulario.coords);
     }
+
+    const onRegisterSubmit = onRegisterIncidenceSubmit;
 
     return (
         <div>
             <form onSubmit={handelSubmit}>
-                <TextField
-                    select
-                    label="Tipo de Incidencia"
-                    fullWidth
-                    name='tipoIncidencia'
-                    value={formulario.tipoIncidencia}
-                    onChange={handleChange}
-                >
-                    {tipoIncidencias.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                            {option.value}
-                        </MenuItem>
-                    ))}
-                </TextField>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <TextField
+                        select
+                        label="Tipo de Incidencia"
+                        fullWidth
+                        name='tipoIncidencia'
+                        value={formulario.tipoIncidencia}
+                        onChange={handleChange}
+                        variant="outlined"
+                        required
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                borderRadius: '10px',
+                            }
+                        }}
+                    >
+                        {tipoIncidencias.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.value}
+                            </MenuItem>
+                        ))}
+                    </TextField>
 
-                <TextField
-                    label="Descripcion"
-                    multiline
-                    rows={4}
-                    fullWidth
-                    name='descripcion'
-                    value={formulario.descripcion}
-                    onChange={handleChange}
-                ></TextField>
-                <TextField
-                    label="¿Donde Ocurrio la Incidencia?"
-                    helperText="Ejemplo: Bloque A, salón 204"
-                    fullWidth
-                    name='ubicacion'
-                    value={formulario.ubicacion}
-                    onChange={handleChange}
-                ></TextField>
-                <Button
-                    component="label"
-                    variant='outlined'
-                    startIcon={<PhotoCameraBackOutlinedIcon />}
-                >
-                    Adjuntar Fotografia
-                    <input
-                        hidden
-                        type='file'
-                        accept='image/*'
-                        capture='environment'
-                        name='imagen'
-                        onChange={handleImagenChange}
+                    <TextField
+                        label="Descripción del Incidente"
+                        multiline
+                        rows={4}
+                        fullWidth
+                        name='descripcion'
+                        value={formulario.descripcion}
+                        onChange={handleChange}
+                        variant="outlined"
+                        required
+                        placeholder="Describe detalladamente el problema observado..."
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                borderRadius: '10px',
+                            }
+                        }}
                     />
-                </Button>
-                {formulario.imagen && (
-                    <Box mt={2}>
-                        <img
-                            src={URL.createObjectURL(formulario.imagen)}
-                            alt='Vista Previa'
-                            width={300}
-                        />
+
+                    <TextField
+                        label="¿Dónde ocurrió la Incidencia?"
+                        helperText="Ejemplo: Bloque A, salón 204, o zona verde junto a biblioteca"
+                        fullWidth
+                        name='ubicacion'
+                        value={formulario.ubicacion}
+                        onChange={handleChange}
+                        variant="outlined"
+                        required
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                borderRadius: '10px',
+                            }
+                        }}
+                    />
+
+                    {/* Fila de Botones Auxiliares (Foto y Ubicación) */}
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' },
+                        gap: 2
+                    }}>
+                        <Button
+                            component="label"
+                            variant='outlined'
+                            startIcon={<PhotoCameraBackOutlinedIcon />}
+                            sx={{
+                                flex: 1,
+                                borderRadius: '10px',
+                                textTransform: 'none',
+                                py: 1.2,
+                                borderColor: '#cbd5e1',
+                                color: '#475569',
+                                '&:hover': {
+                                    borderColor: '#1e40af',
+                                    color: '#1e40af',
+                                    backgroundColor: '#f1f5f9'
+                                }
+                            }}
+                        >
+                            {formulario.imagen ? "Cambiar Fotografía" : "Adjuntar Fotografía"}
+                            <input
+                                hidden
+                                type='file'
+                                accept='image/*'
+                                capture='environment'
+                                name='imagen'
+                                onChange={handleImagenChange}
+                            />
+                        </Button>
+
+                        <Button
+                            variant='outlined'
+                            startIcon={<AddLocationAltOutlinedIcon />}
+                            onClick={getLocation}
+                            name='coords'
+                            value={formulario.coords}
+                            sx={{
+                                flex: 1,
+                                borderRadius: '10px',
+                                textTransform: 'none',
+                                py: 1.2,
+                                borderColor: '#cbd5e1',
+                                color: '#475569',
+                                '&:hover': {
+                                    borderColor: '#1e40af',
+                                    color: '#1e40af',
+                                    backgroundColor: '#f1f5f9'
+                                }
+                            }}
+                        >
+                            {formulario.coords && formulario.coords.latitude !== 0 ? "Ubicación GPS Obtenida" : "Obtener Ubicación GPS"}
+                        </Button>
+                        <Typography variant="caption" color="success.main">
+                            {formulario.coords && formulario.coords.latitude !== 0 && "Ubicación GPS registrada"}
+                        </Typography>
                     </Box>
-                )}
-                <Button
-                    variant='outlined'
-                    startIcon={<AddLocationAltOutlinedIcon />}
-                    name='coords'
-                    value={formulario.coords}
-                    onChange={getLocation}
-                >
-                    Obtener Ubicacion GPS
-                </Button>
-                <Button
-                    variant='contained'
-                    type='submit'
-                >
-                    Registrar Incidencia
-                </Button>
+
+                    {/* Vista Previa de Imagen */}
+                    {formulario.imagen && (
+                        <Box sx={{
+                            mt: 1,
+                            textAlign: 'center',
+                            p: 1.5,
+                            border: '1px dashed #cbd5e1',
+                            borderRadius: '12px',
+                            backgroundColor: '#f8fafc'
+                        }}>
+                            <img
+                                src={URL.createObjectURL(formulario.imagen)}
+                                alt='Vista Previa'
+                                style={{
+                                    maxWidth: '100%',
+                                    maxHeight: '260px',
+                                    borderRadius: '8px',
+                                    objectFit: 'contain'
+                                }}
+                            />
+                        </Box>
+                    )}
+
+                    {/* Botón de Enviar */}
+                    <Button
+                        variant='contained'
+                        type='submit'
+                        fullWidth
+                        sx={{
+                            backgroundColor: '#0d233a',
+                            color: '#ffffff',
+                            borderRadius: '10px',
+                            fontWeight: 600,
+                            textTransform: 'none',
+                            py: 1.5,
+                            fontSize: '1rem',
+                            mt: 2,
+                            boxShadow: '0 4px 6px -1px rgba(13, 35, 58, 0.2)',
+                            '&:hover': {
+                                backgroundColor: '#1e40af',
+                                boxShadow: '0 6px 12px -2px rgba(30, 64, 175, 0.2)'
+                            }
+                        }}
+                    >
+                        Registrar Incidencia
+                    </Button>
+                </Box>
             </form>
         </div >
     )

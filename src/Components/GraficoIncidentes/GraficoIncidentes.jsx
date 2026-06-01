@@ -59,47 +59,72 @@ export default function GraficoIncidentes() {
     };
 
     return (
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '32px' }}>
 
-            <div style={{ textAlign: 'center' }}>
-                <h2 style={{ color: '#333' }}>Prueba de Estadísticas: Roles de Usuarios</h2>
-                <p>Total de usuarios registrados: <strong>{total}</strong></p>
+            {/* Tarjeta KPI de Total de Usuarios */}
+            <div style={{ 
+                backgroundColor: '#ffffff', 
+                padding: '24px', 
+                borderRadius: '16px', 
+                border: '1px solid #e2e8f0', 
+                boxShadow: '0 4px 6px -1px rgba(15, 23, 42, 0.02)',
+                textAlign: 'center',
+                maxWidth: '350px',
+                margin: '0 auto',
+                width: '100%'
+            }}>
+                <h3 style={{ margin: '0 0 8px 0', color: '#64748b', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
+                    Comunidad Registrada
+                </h3>
+                <div style={{ fontSize: '40px', fontWeight: 800, color: '#0d233a', lineHeight: 1 }}>
+                    {total}
+                </div>
+                <p style={{ margin: '8px 0 0 0', color: '#64748b', fontSize: '13px', fontWeight: 500 }}>
+                    Usuarios y administradores activos
+                </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', minHeight: '350px' }}>
+            {/* Grid Responsivo de Gráficos */}
+            <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                gap: '24px', 
+                minHeight: '350px' 
+            }}>
 
                 {/* GRÁFICO DE BARRAS */}
-                <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-                    <h4 style={{ textAlign: 'center' }}>Distribución (Barras)</h4>
-                    <ResponsiveContainer width="100%" height={300}>
+                <div style={{ background: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(15, 23, 42, 0.02)' }}>
+                    <h4 style={{ textAlign: 'center', marginBottom: '20px', color: '#0d233a', fontWeight: 700, fontSize: '16px' }}>Distribución por Rol</h4>
+                    <ResponsiveContainer width="100%" height={260}>
                         <BarChart data={datosGrafico}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="cantidad" fill="#4f46e5" radius={[4, 4, 0, 0]} name="Cant. Personas" />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                            <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
+                            <YAxis tickLine={false} axisLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
+                            <Tooltip cursor={{ fill: '#f8fafc' }} />
+                            <Legend iconType="circle" />
+                            <Bar dataKey="cantidad" fill="#1e40af" radius={[6, 6, 0, 0]} name="Personas" />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
 
                 {/* GRÁFICO LINEAL */}
-                <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-                    <h4 style={{ textAlign: 'center' }}>Tendencia de Roles (Lineal)</h4>
-                    <ResponsiveContainer width="100%" height={300}>
+                <div style={{ background: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(15, 23, 42, 0.02)' }}>
+                    <h4 style={{ textAlign: 'center', marginBottom: '20px', color: '#0d233a', fontWeight: 700, fontSize: '16px' }}>Tendencia de Roles</h4>
+                    <ResponsiveContainer width="100%" height={260}>
                         <LineChart data={datosGrafico}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                            <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
+                            <YAxis tickLine={false} axisLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
                             <Tooltip />
-                            <Legend />
+                            <Legend iconType="circle" />
                             <Line
                                 type="monotone"
                                 dataKey="cantidad"
-                                stroke="#10b981"
+                                stroke="#0ea5e9"
                                 strokeWidth={3}
-                                dot={{ r: 6 }}
-                                name="Cant. Personas"
+                                dot={{ r: 6, stroke: '#0ea5e9', strokeWidth: 2, fill: '#fff' }}
+                                activeDot={{ r: 8 }}
+                                name="Personas"
                             />
                         </LineChart>
                     </ResponsiveContainer>

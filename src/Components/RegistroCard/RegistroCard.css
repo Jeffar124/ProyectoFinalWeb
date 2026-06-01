@@ -1,56 +1,144 @@
-.registro-card {
-    width: 350px;
-    margin: 50px auto;
-    padding: 25px;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
+/* Contenedor principal para centrar la tarjeta en la pantalla */
+.registro-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f1f5f9;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.titulo {
+/* Estructura de la tarjeta */
+.registro-card {
+    background: #ffffff;
+    padding: 40px 32px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+    border: 1px solid #e2e8f0;
+}
+
+/* Encabezado */
+.registro-header {
     text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 28px;
+}
+
+.registro-header h2 {
+    margin: 0 0 8px 0;
+    color: #0d233a;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.registro-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* Formulario y Grupos de Entrada */
+.registro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
 .grupo-input {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    gap: 6px;
 }
 
 .grupo-input label {
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #444;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .grupo-input input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 11px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
     font-size: 14px;
+    color: #1e293b;
+    background-color: #f8fafc;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
-    transition: border-color 0.3s;
 }
 
+/* Enfoque de los inputs (Focus) */
 .grupo-input input:focus {
-    border-color: #2563eb;
+    border-color: #1e40af;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.15);
 }
 
+.grupo-input input::placeholder {
+    color: #94a3b8;
+}
+
+/* Botón de envío */
 .btn-registro {
-    width: 100%;
+    background-color: #0d233a;
+    color: #ffffff;
     padding: 12px;
     border: none;
-    border-radius: 8px;
-    background-color: #2563eb;
-    color: white;
-    font-size: 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 8px;
+    box-shadow: 0 4px 6px -1px rgba(13, 35, 58, 0.1);
+    width: 100%;
 }
 
 .btn-registro:hover {
-    background-color: #1d4ed8;
+    background-color: #1e40af;
+    box-shadow: 0 6px 12px -2px rgba(30, 64, 175, 0.2);
+}
+
+.btn-registro:active {
+    transform: scale(0.98);
+}
+
+/* Mensajes de error */
+.error-message {
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    color: #b91c1c;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Pie de la tarjeta */
+.registro-footer {
+    margin-top: 28px;
+    text-align: center;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.registro-footer p {
+    margin: 0;
+}
+
+.registro-footer a {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.registro-footer a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
 }
