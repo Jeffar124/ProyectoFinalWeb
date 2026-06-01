@@ -16,7 +16,7 @@ const FormularioIncidente = ({ onRegisterIncidenceSubmit }) => {
     })
     const tipoIncidencias = [
         {
-            value: 'Infraestructra'
+            value: 'Infraestructura'
         },
         {
             value: 'Electricidad'

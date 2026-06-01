@@ -29,9 +29,6 @@ const Estadisticas = () => {
             <Typography variant="h4" sx={{ fontWeight: 700, color: '#0d233a', mb: 1, letterSpacing: '-0.025em' }}>
               Estadísticas del Sistema
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Métricas y análisis del estado de usuarios y roles registrados.
-            </Typography>
           </Box>
           <Button
             onClick={handleVolver}

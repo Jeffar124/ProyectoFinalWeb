@@ -1,0 +1,67 @@
+.seccion-reporte {
+  padding: 20px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.controles-reporte {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.grid-reporte {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.tarjeta-grafico {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.tarjeta-grafico h3 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #334155;
+}
+
+.contenedor-recharts {
+  width: 100%;
+  height: 280px;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  .area-impresion {
+    width: 100%;
+  }
+  
+  .grid-reporte {
+    display: block !important;
+  }
+  
+  .tarjeta-grafico {
+    page-break-inside: avoid;
+    margin-bottom: 40px;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0;
+  }
+}
