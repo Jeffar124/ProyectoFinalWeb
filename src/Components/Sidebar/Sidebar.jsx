@@ -51,6 +51,7 @@ export default function SimpleSidebar({ children }) {
             menuItems.push(
                 { text: 'Panel Admin', path: '/paneladmin', icon: <DashboardIcon /> },
                 { text: 'Estadísticas', path: '/estadisticas', icon: <BarChartIcon /> },
+                { text: 'Gestionar Incidentes', path: '/incidentesadmin', icon: <HistoryIcon /> },
             );
         }
     }

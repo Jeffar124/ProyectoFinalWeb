@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { Paper, Typography, Button } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 
 const IncidenteEstadoVacio = () => {
     return (
@@ -25,7 +25,6 @@ const IncidenteEstadoVacio = () => {
                 component={Link}
                 to="/registrarincidente"
                 variant="contained"
-                startIcon={<AddCircleOutlineIcon />}
                 sx={{
                     backgroundColor: '#0d233a',
                     borderRadius: '50px',
