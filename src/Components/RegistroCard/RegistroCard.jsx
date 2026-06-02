@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react'
 import './RegistroCard.css'
 import { Link } from 'react-router-dom';
 
+import { VisibilityOutlined, VisibilityOffOutlined } from '@mui/icons-material';
+
 const RegistroCard = ({ onRegisterSubmit, errorServidor }) => {
     const [formulario, setFormulario] = useState({
         nombre: "",
         correo: "",
         contraseña: "",
     });
+
+    const [changePassword, setChangePassword] = useState(true);
+    const changeIcon = changePassword === true ? false : true;
 
     const handleChange = (e) => {
         setFormulario({
@@ -20,6 +25,8 @@ const RegistroCard = ({ onRegisterSubmit, errorServidor }) => {
         e.preventDefault();
         onRegisterSubmit(formulario.nombre, formulario.correo, formulario.contraseña);
     };
+
+
 
     return (
         <div className="registro-container">
@@ -61,7 +68,7 @@ const RegistroCard = ({ onRegisterSubmit, errorServidor }) => {
                     <div className="grupo-input">
                         <label htmlFor="contraseña">Contraseña</label>
                         <input
-                            type="password"
+                            type={changePassword ? "password" : "text"}
                             id="contraseña"
                             name="contraseña"
                             value={formulario.contraseña}
@@ -69,6 +76,13 @@ const RegistroCard = ({ onRegisterSubmit, errorServidor }) => {
                             placeholder="••••••••"
                             required
                         />
+                        <span className="icon"
+                            onClick={() => {
+                                setChangePassword(changeIcon);
+                            }}
+                        >
+                            {changeIcon ? <VisibilityOutlined /> : <VisibilityOffOutlined />}
+                        </span>
                     </div>
 
                     <button type="submit" className="btn-registro">

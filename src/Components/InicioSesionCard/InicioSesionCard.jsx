@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import './InicioSesionCard.css';
 import { Link } from 'react-router-dom';
+import { VisibilityOutlined, VisibilityOffOutlined } from '@mui/icons-material';
 
 const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const [changePassword, setChangePassword] = useState(true);
+    const changeIcon = changePassword === true ? false : true;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -38,17 +42,24 @@ const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
                     <div className="form-group">
                         <label htmlFor="password">Contraseña</label>
                         <input
-                            type="password"
+                            type={changePassword ? "password" : "text"}
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
                             required
                         />
+                        <span className="icon"
+                            onClick={() => {
+                                setChangePassword(changeIcon);
+                            }}
+                        >
+                            {changeIcon ? <VisibilityOutlined /> : <VisibilityOffOutlined />}
+                        </span>
                     </div>
 
                     <div className="form-actions">
-                        <a href="#forgot" className="forgot-password">¿Olvidaste tu contraseña?</a>
+                        <Link to="/recuperar" className="forgot-password">¿Olvidaste tu contraseña?</Link>
                     </div>
 
                     <button type="submit" className="login-btn">

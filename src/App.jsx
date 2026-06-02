@@ -13,6 +13,7 @@ import Estadisticas from './Pages/Estadisticas/Estadisticas.jsx'
 import DetalleIncidente from './Pages/DetalleIncidente/DetalleIncidente.jsx'
 import IncidentesAdmin from './Pages/IncidentesAdmin/IncidentesAdmin.jsx'
 import Error from './Pages/Error/Error.jsx'
+import RecuperarContrasena from './Pages/RecuperarContrasena/RecuperarContrasena.jsx'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/registro' element={<Registro />} />
             <Route path='/iniciosesion' element={<InicioSesion />} />
+            <Route path='/recuperar' element={<RecuperarContrasena />} />
             <Route path='/*' element={<Error />} />
 
             <Route element={<ProtectedRoute allowedRoles={["Usuario"]} />}>

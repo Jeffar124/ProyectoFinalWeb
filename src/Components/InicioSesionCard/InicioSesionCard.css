@@ -49,6 +49,7 @@
 }
 
 .form-group {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -123,6 +124,19 @@
 
 .login-btn:active {
     transform: scale(0.98);
+}
+
+
+
+.form-group .icon {
+    position: absolute;
+    right: 15px;
+    top: 72%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #64748b;
+    display: flex;
+    align-items: center;
 }
 
 /* Mensajes de error */

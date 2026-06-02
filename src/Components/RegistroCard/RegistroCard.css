@@ -49,9 +49,21 @@
 }
 
 .grupo-input {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 6px;
+}
+
+.grupo-input .icon {
+    position: absolute;
+    right: 15px;
+    top: 72%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #64748b;
+    display: flex;
+    align-items: center;
 }
 
 .grupo-input label {

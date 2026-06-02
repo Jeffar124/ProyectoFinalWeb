@@ -1,0 +1,98 @@
+.recuperar-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f4f7fb;
+    padding: 20px;
+}
+
+.recuperar-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.recuperar-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.recuperar-header h2 {
+    margin: 0;
+    color: #0d233a;
+    font-size: 1.8rem;
+}
+
+.recuperar-header p {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.recuperar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.form-group input {
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #0d233a;
+}
+
+.recuperar-btn {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #0d233a;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.recuperar-btn:hover {
+    background: #163554;
+}
+
+.recuperar-footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #64748b;
+}
+
+.recuperar-footer a {
+    color: #0d233a;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.recuperar-footer a:hover {
+    text-decoration: underline;
+}
