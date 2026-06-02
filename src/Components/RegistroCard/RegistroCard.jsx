@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './RegistroCard.css'
 import { Link } from 'react-router-dom';
 
-const RegistroCard = ({ onRegisterSubmit, errorServidor}) => {
+const RegistroCard = ({ onRegisterSubmit, errorServidor }) => {
     const [formulario, setFormulario] = useState({
         nombre: "",
         correo: "",
@@ -53,7 +53,7 @@ const RegistroCard = ({ onRegisterSubmit, errorServidor}) => {
                             name="correo"
                             value={formulario.correo}
                             onChange={handleChange}
-                            placeholder="usuario@uniamazonia.edu.co"
+                            placeholder="correo@universidad.edu.co"
                             required
                         />
                     </div>

@@ -1,46 +1,187 @@
+/* GraficoIncidentes - UniReportes */
+
 .seccion-reporte {
-  padding: 20px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 0;
 }
 
+/* Controles del reporte */
+.controles-reporte {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.controles-reporte>div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.control-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.control-grupo label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.control-grupo select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 36px 8px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  outline: none;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 160px;
+}
+
+.control-grupo select:hover {
+  border-color: #94a3b8;
+}
+
+.control-grupo select:focus {
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.12);
+}
+
+/* Botón de imprimir */
+.btn-imprimir {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1e40af;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px -2px rgba(13, 35, 58, 0.25);
+  white-space: nowrap;
+}
+
+.btn-imprimir:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px -3px rgba(13, 35, 58, 0.3);
+}
+
+/* Header del reporte */
+.reporte-header {
+  margin-bottom: 24px;
+}
+
+.reporte-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0d233a;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.reporte-header p {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.reporte-header strong {
+  color: #1e40af;
+  font-weight: 600;
+}
+
+/* KPI card */
+.kpi-card {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 16px;
+  background: #1e3a8a;
+  border-radius: 16px;
+  padding: 20px 28px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 24px -6px rgba(13, 35, 58, 0.25);
+}
+
+
+.kpi-content h3 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+
+.kpi-content p {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* Grid de gráficos */
 .contenedor-graficos {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
   min-height: 350px;
-  margin-top: 10px;
-
+  margin-top: 0;
 }
 
-.controles-reporte {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  gap: 20px;
-  flex-wrap: wrap;
+@media (min-width: 768px) {
+  .contenedor-graficos {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
-.grid-reporte {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-}
-
+/* Tarjeta de gráfico */
 .tarjeta-grafico {
   background: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 24px;
+  border-radius: 16px;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease;
+}
+
+.tarjeta-grafico:hover {
+  box-shadow: 0 6px 20px -4px rgba(13, 35, 58, 0.08);
 }
 
 .tarjeta-grafico h3 {
   text-align: center;
   margin-top: 0;
   margin-bottom: 20px;
-  font-size: 16px;
-  color: #334155;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0d233a;
+  letter-spacing: -0.01em;
 }
 
 .contenedor-recharts {
@@ -48,6 +189,7 @@
   height: 280px;
 }
 
+/* ESTILOS DE IMPRESIÓN */
 @media print {
   body {
     background: #ffffff !important;
@@ -62,7 +204,7 @@
     width: 100%;
   }
 
-  .grid-reporte {
+  .contenedor-graficos {
     display: block !important;
   }
 
@@ -72,5 +214,11 @@
     border: none !important;
     box-shadow: none !important;
     padding: 0;
+  }
+
+  .kpi-card {
+    background: #f1f5f9 !important;
+    box-shadow: none !important;
+    color: #000 !important;
   }
 }

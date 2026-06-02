@@ -26,8 +26,11 @@ const Estadisticas = () => {
         {/* Cabecera con Botón Volver */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, mb: 5 }}>
           <Box>
-            <Typography variant="h4" sx={{ fontWeight: 700, color: '#0d233a', mb: 1, letterSpacing: '-0.025em' }}>
+            <Typography variant="h4" sx={{ fontWeight: 700, color: '#0d233a', mb: 0.5, letterSpacing: '-0.025em' }}>
               Estadísticas del Sistema
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Visualiza gráficos interactivos de distribución y tendencias de incidentes.
             </Typography>
           </Box>
           <Button
@@ -42,6 +45,7 @@ const Estadisticas = () => {
               fontWeight: 600,
               py: 1,
               px: 2,
+              flexShrink: 0,
               '&:hover': {
                 borderColor: '#1e40af',
                 color: '#1e40af',
@@ -55,10 +59,10 @@ const Estadisticas = () => {
 
         <Box sx={{
           backgroundColor: '#ffffff',
-          p: { xs: 2, md: 4 },
-          borderRadius: '16px',
+          p: { xs: 2.5, md: 4 },
+          borderRadius: '20px',
           border: '1px solid #e2e8f0',
-          boxShadow: '0 4px 6px -1px rgba(15, 23, 42, 0.02)'
+          boxShadow: '0 4px 16px -4px rgba(13, 35, 58, 0.05)',
         }}>
           <GraficoIncidentes />
         </Box>

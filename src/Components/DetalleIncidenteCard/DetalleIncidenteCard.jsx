@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Card,
     CardHeader,
@@ -12,25 +12,17 @@ import {
     Dialog,
     IconButton,
     CardActionArea,
-    DialogContent
+    DialogContent,
+    Paper
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import {
-    ReportProblemOutlined,
-    LocationOnOutlined,
-    CalendarMonthOutlined,
-    PersonOutlineOutlined,
-    CategoryOutlined,
-    MapOutlined
-} from '@mui/icons-material';
-
-
-// Configuración de colores para los estados
-const STATUS_CONFIG = {
-    'Reportado': { color: 'error', variant: 'filled' },
-    'En proceso': { color: 'warning', variant: 'filled' },
-    'Resuelto': { color: 'success', variant: 'filled' }
-};
+import { doc, getDoc } from "firebase/firestore";
+import { db } from '../../Firebase/config';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import PersonIcon from '@mui/icons-material/Person';
+import GpsFixedIcon from '@mui/icons-material/GpsFixed';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
 
 const DetalleIncidenteCard = ({ incidente, renderEstadoBadge, formatFecha }) => {
     const {
@@ -46,56 +38,116 @@ const DetalleIncidenteCard = ({ incidente, renderEstadoBadge, formatFecha }) => 
     } = incidente;
 
     const [openImageModal, setOpenImageModal] = useState(false);
+    const [nombreUsuario, setNombreUsuario] = useState('');
 
-    const handleOpenModal = () => {
-        setOpenImageModal(true);
-
-    }
+    const handleOpenModal = () => setOpenImageModal(true);
     const handleCloseModal = () => setOpenImageModal(false);
 
+    useEffect(() => {
+        const obtenerUsuario = async () => {
+            const docRef = doc(db, "usuarios", usuarioId)
+            const docSnap = await getDoc(docRef)
+            if (docSnap.exists()) {
+                setNombreUsuario(docSnap.data().nombre);
+            }
+        }
+        if (usuarioId) obtenerUsuario()
+    }, [usuarioId])
 
     return (
-        <Card elevation={3} sx={{ maxWidth: 600, borderRadius: 3, overflow: 'hidden', mx: 'auto', my: 2 }}>
-            <CardHeader
-                title={
-                    <Typography variant="h5" color="primary.main">
-                        Incidencia #{id}
+        <Card
+            elevation={0}
+            sx={{
+                maxWidth: 680,
+                borderRadius: '20px',
+                overflow: 'hidden',
+                mx: 'auto',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 4px 24px -6px rgba(13, 35, 58, 0.08)',
+            }}
+        >
+            {/* Header con gradiente */}
+            <Box
+                sx={{
+                    background: '#1e3a8a',
+                    px: 3,
+                    py: 2.5,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
+                <Box>
+                    <Typography variant="caption" sx={{ color: '#93c5fd', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                        Reporte
                     </Typography>
-                }
-                action={renderEstadoBadge(estado)}
-            />
+                    <Typography variant="h6" sx={{ color: '#ffffff', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+                        #{id?.substring(0, 8)}
+                    </Typography>
+                </Box>
+                {renderEstadoBadge(estado)}
+            </Box>
 
+            {/* Imagen con overlay de zoom */}
             {imagen && (
                 <>
-                    <CardActionArea onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenModal();
-                    }}
-                        sx={{ '&:hover .MuiCardActionArea-focusHighlight': { opacity: 0.05 } }}>
-                        <CardMedia component="img" height="240" image={imagen} alt="Evidencia"
+                    <CardActionArea
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenModal();
+                        }}
+                        sx={{
+                            position: 'relative',
+                            '&:hover .zoom-overlay': { opacity: 1 },
+                            '&:hover img': { transform: 'scale(1.03)' }
+                        }}
+                    >
+                        <CardMedia
+                            component="img"
+                            height="260"
+                            image={imagen}
+                            alt="Evidencia"
                             sx={{
                                 objectFit: 'cover',
-                                transition: 'transform 0.2s ease-in-out',
-                                '&:hover': { transform: 'scale(1.02)' }
-                            }} />
+                                transition: 'transform 0.35s ease-in-out',
+                            }}
+                        />
+                        {/* Overlay de zoom */}
                         <Box
+                            className="zoom-overlay"
                             sx={{
                                 position: 'absolute',
-                                bottom: 8,
-                                right: 8,
-                                bgcolor: 'rgba(0,0,0,0.6)',
-                                color: 'white',
-                                px: 1,
-                                py: 0.5,
-                                borderRadius: 1,
-                                fontSize: '0.7rem',
-                                fontWeight: 'bold'
+                                inset: 0,
+                                background: 'rgba(13, 35, 58, 0.45)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                opacity: 0,
+                                transition: 'opacity 0.25s ease',
                             }}
                         >
-                            Click para ampliar
-
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    background: 'rgba(255,255,255,0.15)',
+                                    backdropFilter: 'blur(8px)',
+                                    border: '1px solid rgba(255,255,255,0.3)',
+                                    color: '#ffffff',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: '50px',
+                                    fontSize: '0.85rem',
+                                    fontWeight: 600,
+                                }}
+                            >
+                                Ver imagen completa
+                            </Box>
                         </Box>
                     </CardActionArea>
+
+                    {/* Modal de imagen ampliada */}
                     <Dialog
                         open={openImageModal}
                         onClose={(e) => {
@@ -105,101 +157,215 @@ const DetalleIncidenteCard = ({ incidente, renderEstadoBadge, formatFecha }) => 
                         maxWidth="lg"
                         fullWidth
                         onClick={(e) => e.stopPropagation()}
+                        PaperProps={{ sx: { borderRadius: '16px', overflow: 'hidden' } }}
                     >
                         <DialogContent sx={{ p: 0 }}>
                             <img
                                 src={imagen}
                                 alt="Evidencia ampliada"
-                                style={{
-                                    width: '100%',
-                                    display: 'block'
-                                }}
+                                style={{ width: '100%', display: 'block' }}
                             />
                         </DialogContent>
                     </Dialog>
                 </>
-
             )}
 
-            <CardContent sx={{ pt: imagen ? 2 : 0 }}>
-                <Stack spacing={2.5}>
+            {/* Contenido principal */}
+            <CardContent sx={{ p: 3 }}>
+                <Stack spacing={3}>
 
-                    {/* Categoría */}
-                    <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                    {/* Tipo de incidencia */}
+                    <Box>
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                fontWeight: 700,
+                                color: '#0d233a',
+                                mb: 0.5,
+                                letterSpacing: '-0.01em',
+                            }}
+                        >
                             {tipoIncidencia}
                         </Typography>
+                        <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 500 }}>
+                            Categoría del incidente
+                        </Typography>
                     </Box>
-                    <Box>
-                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5, fontWeight: 'bold' }}>
+
+                    {/* Descripción */}
+                    <Paper
+                        elevation={0}
+                        sx={{
+                            p: 2.5,
+                            backgroundColor: '#f8fafc',
+                            borderRadius: '12px',
+                            border: '1px solid #e2e8f0',
+                        }}
+                    >
+                        <Typography
+                            variant="caption"
+                            sx={{ color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', mb: 1 }}
+                        >
                             Descripción del incidente
                         </Typography>
-                        <Typography variant="body1" color="text.primary">
-                            {descripcion}
+                        <Typography variant="body1" sx={{ color: '#1e293b', lineHeight: 1.7 }}>
+                            {descripcion || 'Sin descripción adicional.'}
                         </Typography>
-                    </Box>
+                    </Paper>
 
-                    <Divider />
+                    <Divider sx={{ borderColor: '#f1f5f9' }} />
 
+                    {/* Metadatos en cuadrícula */}
                     <Grid container spacing={2}>
 
-                        <Grid container spacing={2.5}>
-                            {/* Fila 1: Ubicación en texto */}
+                        {/* Ubicación */}
+                        <Grid size={12}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    gap: 1.5,
+                                    p: 2,
+                                    borderRadius: '12px',
+                                    backgroundColor: '#f8fafc',
+                                    border: '1px solid #e2e8f0',
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        p: 1,
+                                        borderRadius: '8px',
+                                        backgroundColor: '#eff6ff',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                </Box>
+                                <Box>
+                                    <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', mb: 0.3 }}>
+                                        Ubicación reportada
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ fontWeight: 500, color: '#1e293b' }}>
+                                        {ubicacion}
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </Grid>
+
+                        {/* Coordenadas */}
+                        {coords && (
                             <Grid size={12}>
-                                <Box display="flex" alignItems="flex-start" gap={1.5}>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'flex-start',
+                                        gap: 1.5,
+                                        p: 2,
+                                        borderRadius: '12px',
+                                        backgroundColor: '#f8fafc',
+                                        border: '1px solid #e2e8f0',
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            p: 1,
+                                            borderRadius: '8px',
+                                            backgroundColor: '#f0fdf4',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flexShrink: 0,
+                                        }}
+                                    >
+                                    </Box>
                                     <Box>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600, letterSpacing: 0.5 }}>
-                                            UBICACIÓN REPORTADA
+                                        <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', mb: 0.3 }}>
+                                            Coordenadas GPS
                                         </Typography>
-                                        <Typography variant="body2" sx={{ fontWeight: 500, mt: 0.2 }}>
-                                            {ubicacion}
+                                        <Typography variant="body2" sx={{ fontWeight: 500, color: '#1e293b', fontFamily: 'monospace' }}>
+                                            Lat: {coords.latitude?.toFixed(6)} • Lon: {coords.longitude?.toFixed(6)}
                                         </Typography>
                                     </Box>
                                 </Box>
                             </Grid>
+                        )}
 
-                            {/* Fila 2: Coordenadas */}
-                            {coords && (
-                                <Grid size={12} sx={{ mt: -1 }}> {/* Un margen negativo ligero para que queden agrupadas visualmente */}
-                                    <Box display="flex" alignItems="flex-start" gap={1.5}>
-                                        <Box>
-                                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600, letterSpacing: 0.5 }}>
-                                                COORDENADAS DE MAPA
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ py: 0.2, display: 'inline-block', mt: 0.2 }}>
-                                                Lat: {coords.latitude} • Lon: {coords.longitude}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Grid>
-                            )}
-                        </Grid>
-
-                        <Grid size={6}>
-                            <Box display="flex" alignItems="center" gap={1}>
+                        {/* Fecha */}
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    gap: 1.5,
+                                    p: 2,
+                                    borderRadius: '12px',
+                                    backgroundColor: '#f8fafc',
+                                    border: '1px solid #e2e8f0',
+                                    height: '100%',
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        p: 1,
+                                        borderRadius: '8px',
+                                        backgroundColor: '#fff7ed',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                </Box>
                                 <Box>
-                                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                                        Reportado el
+                                    <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', mb: 0.3 }}>
+                                        Fecha de reporte
                                     </Typography>
-                                    <Typography variant="body2" color="text.primary">
+                                    <Typography variant="body2" sx={{ fontWeight: 500, color: '#1e293b' }}>
                                         {formatFecha(fechaCreacion)}
                                     </Typography>
                                 </Box>
                             </Box>
                         </Grid>
 
-                        <Grid size={6}>
-                            <Box display="flex" alignItems="center" gap={1}>
+                        {/* Usuario */}
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    gap: 1.5,
+                                    p: 2,
+                                    borderRadius: '12px',
+                                    backgroundColor: '#f8fafc',
+                                    border: '1px solid #e2e8f0',
+                                    height: '100%',
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        p: 1,
+                                        borderRadius: '8px',
+                                        backgroundColor: '#fdf4ff',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                </Box>
                                 <Box>
-                                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                                        Usuario ID
+                                    <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', mb: 0.3 }}>
+                                        Reportado por
                                     </Typography>
-                                    <Typography variant="body2" color="text.primary">
-                                        {usuarioId}
+                                    <Typography variant="body2" sx={{ fontWeight: 500, color: '#1e293b' }}>
+                                        {nombreUsuario || '—'}
                                     </Typography>
                                 </Box>
                             </Box>
                         </Grid>
+
                     </Grid>
                 </Stack>
             </CardContent>

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import Registro from './Pages/Registro/Registro'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -13,6 +12,7 @@ import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute.jsx'
 import Estadisticas from './Pages/Estadisticas/Estadisticas.jsx'
 import DetalleIncidente from './Pages/DetalleIncidente/DetalleIncidente.jsx'
 import IncidentesAdmin from './Pages/IncidentesAdmin/IncidentesAdmin.jsx'
+import Error from './Pages/Error/Error.jsx'
 
 function App() {
 
@@ -24,6 +24,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/registro' element={<Registro />} />
             <Route path='/iniciosesion' element={<InicioSesion />} />
+            <Route path='/*' element={<Error />} />
 
             <Route element={<ProtectedRoute allowedRoles={["Usuario"]} />}>
               <Route path='/panelusuario' element={<PanelUsuario />} />

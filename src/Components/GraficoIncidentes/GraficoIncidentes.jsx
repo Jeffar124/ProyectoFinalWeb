@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../Firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { format, startOfWeek, endOfWeek } from 'date-fns';
-import { es } from 'date-fns/locale'; // Para nombres de meses/días en español
+import { es } from 'date-fns/locale';
 import {
   BarChart, Bar,
   LineChart, Line,
@@ -35,7 +35,7 @@ export default function GraficoIncidentes() {
   const [incidentes, setIncidentes] = useState([]);
 
   // Filtros de periodo
-  const [tipoPeriodo, setTipoPeriodo] = useState('meses'); // dias, semanas, meses, anos
+  const [tipoPeriodo, setTipoPeriodo] = useState('meses');
   const [valorPeriodo, setValorPeriodo] = useState('Todos');
   const [opcionesPeriodo, setOpcionesPeriodo] = useState([]);
 
@@ -130,7 +130,7 @@ export default function GraficoIncidentes() {
     setTotalIncidentes(filtrados.length);
 
     // 1. Agrupación por Estado
-    const conteoEstado = { 'Reportado': 0, 'En proceso': 0, 'Resuelto': 0 };
+    const conteoEstado = { 'Reportado': 0, 'En Proceso': 0, 'Resuelto': 0 };
     filtrados.forEach(i => {
       const est = i.estado || 'Reportado';
       if (conteoEstado[est] !== undefined) conteoEstado[est]++;
@@ -169,7 +169,7 @@ export default function GraficoIncidentes() {
       <div className="controles-reporte no-print">
         <div>
 
-          <div>
+          <div className="control-grupo">
             <label>Magnitud Temporal:</label>
             <select value={tipoPeriodo} onChange={(e) => setTipoPeriodo(e.target.value)}>
               <option value="dias">Días</option>
@@ -179,7 +179,7 @@ export default function GraficoIncidentes() {
             </select>
           </div>
 
-          <div>
+          <div className="control-grupo">
             <label>Periodo Específico:</label>
             <select value={valorPeriodo} onChange={(e) => setValorPeriodo(e.target.value)}>
               {opcionesPeriodo.map(opc => (
@@ -190,21 +190,23 @@ export default function GraficoIncidentes() {
 
         </div>
 
-        <button onClick={() => window.print()}>
+        <button className="btn-imprimir" onClick={() => window.print()}>
           Imprimir Reporte
         </button>
       </div>
 
       {/* Vista de Impresión */}
-      <div>
-        <div>
+      <div className="area-impresion">
+        <div className="reporte-header">
           <h1>Reporte Estadístico del Sistema</h1>
           <p>Filtrado por: <strong>{tipoPeriodo.toUpperCase()}</strong> — Detalle: <strong>{valorPeriodo}</strong></p>
         </div>
 
-        <div>
-          <h3>Número Total de Incidentes</h3>
-          <p>{totalIncidentes}</p>
+        <div className="kpi-card">
+          <div className="kpi-content">
+            <h3>Total de Incidentes</h3>
+            <p>{totalIncidentes}</p>
+          </div>
         </div>
 
         <div className='contenedor-graficos'>

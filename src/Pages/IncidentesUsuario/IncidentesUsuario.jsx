@@ -79,7 +79,8 @@ const IncidentesUsuario = () => {
                             boxShadow: '0 4px 6px -1px rgba(13, 35, 58, 0.2)',
                             '&:hover': {
                                 backgroundColor: '#1e40af',
-                                boxShadow: '0 6px 12px -2px rgba(30, 64, 175, 0.2)'
+                                boxShadow: '0 6px 12px -2px rgba(30, 64, 175, 0.2)',
+                                color: '#ffffff'
                             }
                         }}
                     >

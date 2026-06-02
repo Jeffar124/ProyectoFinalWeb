@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { db } from "../../Firebase/config";
 import {
   collection,
@@ -34,7 +34,6 @@ import { DataGrid } from "@mui/x-data-grid";
 
 const IncidentesAdmin = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [incidentes, setIncidentes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -42,6 +41,9 @@ const IncidentesAdmin = () => {
   const [seleccionados, setSeleccionados] = useState([]);
   const [nuevoEstado, setNuevoEstado] = useState("");
   const [updating, setUpdating] = useState(false);
+
+  // Filtro por estado
+  const [filtroEstado, setFiltroEstado] = useState("Todos");
 
   // Clave para forzar el reseteo limpio del DataGrid tras el guardado
   const [gridKey, setGridKey] = useState(0);
@@ -243,7 +245,8 @@ const IncidentesAdmin = () => {
           variant="outlined"
           size="small"
           startIcon={<VisibilityIcon />}
-          onClick={() => navigate(`/detallesincidente/${params.row.id}`)}
+          LinkComponent={Link}
+          to={`/detalleincidente/${params.row.id}`}
           sx={{
             textTransform: "none",
             borderRadius: "6px",
@@ -346,10 +349,41 @@ const IncidentesAdmin = () => {
   const paginationModel = { page: 0, pageSize: 5 };
 
   // Cálculo del total adaptado a la lectura de Sets o Arrays nativos
-
   const totalSeleccionados = seleccionados?.ids
     ? seleccionados.ids.size
     : seleccionados?.length || 0;
+
+  // Incidentes filtrados por estado
+  const incidentesFiltrados =
+    filtroEstado === "Todos"
+      ? incidentes
+      : incidentes.filter((i) => {
+          const est = i.estado || "Reportado";
+          if (filtroEstado === "En Proceso")
+            return est === "En proceso" || est === "En Proceso";
+          return est === filtroEstado;
+        });
+
+  const conteoEstados = {
+    Todos: incidentes.length,
+    Reportado: incidentes.filter((i) => {
+      const e = i.estado || "Reportado";
+      return e === "Reportado";
+    }).length,
+    "En Proceso": incidentes.filter((i) => {
+      const e = i.estado || "Reportado";
+      return e === "En proceso" || e === "En Proceso";
+    }).length,
+    Resuelto: incidentes.filter((i) => (i.estado || "Reportado") === "Resuelto")
+      .length,
+  };
+
+  const FILTROS = [
+    { label: "Todos", value: "Todos", bg: "#f1f5f9", color: "#334155", activeBg: "#0d233a", activeColor: "#fff" },
+    { label: "Reportado", value: "Reportado", bg: "#fef3c7", color: "#b45309", activeBg: "#d97706", activeColor: "#fff" },
+    { label: "En Proceso", value: "En Proceso", bg: "#dbeafe", color: "#1d4ed8", activeBg: "#1d4ed8", activeColor: "#fff" },
+    { label: "Resuelto", value: "Resuelto", bg: "#d1fae5", color: "#047857", activeBg: "#16a34a", activeColor: "#fff" },
+  ];
 
   return (
     <SimpleSidebar>
@@ -370,16 +404,15 @@ const IncidentesAdmin = () => {
               sx={{
                 fontWeight: 700,
                 color: "#0d233a",
-                mb: 1,
+                mb: 0.5,
                 letterSpacing: "-0.025em",
               }}
             >
-              Panel de Administración
+              Gestión de Incidentes
             </Typography>
 
             <Typography variant="body2" color="text.secondary">
-              Gestión, consulta global y actualización masiva de incidencias
-              registradas.
+              Consulta, filtra y actualiza masivamente los incidentes registrados en el sistema.
             </Typography>
           </Box>
         </Box>
@@ -530,6 +563,78 @@ const IncidentesAdmin = () => {
             })()}
         </Box>
 
+        {/* Filtro por Estado */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
+            mb: 2,
+            flexWrap: "wrap",
+          }}
+        >
+          <Typography
+            variant="body2"
+            sx={{ fontWeight: 700, color: "#64748b", mr: 0.5 }}
+          >
+            Filtrar por estado:
+          </Typography>
+          {FILTROS.map((f) => {
+            const activo = filtroEstado === f.value;
+            return (
+              <Box
+                key={f.value}
+                onClick={() => {
+                  setFiltroEstado(f.value);
+                  setSeleccionados([]);
+                  setGridKey((prev) => prev + 1);
+                }}
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 0.8,
+                  px: 1.75,
+                  py: 0.6,
+                  borderRadius: "999px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "0.8125rem",
+                  backgroundColor: activo ? f.activeBg : f.bg,
+                  color: activo ? f.activeColor : f.color,
+                  border: "1.5px solid",
+                  borderColor: activo ? f.activeBg : "transparent",
+                  transition: "all 0.18s ease",
+                  userSelect: "none",
+                  "&:hover": {
+                    opacity: 0.85,
+                    transform: "translateY(-1px)",
+                  },
+                }}
+              >
+                {f.label}
+                <Box
+                  component="span"
+                  sx={{
+                    backgroundColor: activo
+                      ? "rgba(255,255,255,0.25)"
+                      : "rgba(0,0,0,0.08)",
+                    borderRadius: "999px",
+                    px: 0.75,
+                    py: 0.1,
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    lineHeight: 1.6,
+                    minWidth: "20px",
+                    textAlign: "center",
+                  }}
+                >
+                  {conteoEstados[f.value]}
+                </Box>
+              </Box>
+            );
+          })}
+        </Box>
+
         {/* Tabla */}
 
         {loading ? (
@@ -548,10 +653,8 @@ const IncidentesAdmin = () => {
             }}
           >
             <DataGrid
-              key={
-                gridKey
-              } /* Destruye el estado visual residual al incrementar */
-              rows={incidentes}
+              key={gridKey} /* Destruye el estado visual residual al incrementar */
+              rows={incidentesFiltrados}
               columns={columns}
               getRowId={(row) => row.id}
               initialState={{ pagination: { paginationModel } }}

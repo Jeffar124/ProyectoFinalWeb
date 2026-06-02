@@ -51,7 +51,7 @@ const PanelAdmin = () => {
                         ¡Bienvenido, {user ? user.nombre : "Administrador"}!
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Acceso a las herramientas de control y análisis de métricas globales de Uniamazonia Reporta.
+                        Acceso a las herramientas de control y análisis de métricas globales de UniReportes.
                     </Typography>
                 </Box>
 

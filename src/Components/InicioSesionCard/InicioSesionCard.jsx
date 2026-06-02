@@ -30,7 +30,7 @@ const InicioSesionCard = ({ onLoginSubmit, errorServidor }) => {
                             id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="usuario@uniamazonia.edu.co"
+                            placeholder="correo@universidad.edu.co"
                             required
                         />
                     </div>

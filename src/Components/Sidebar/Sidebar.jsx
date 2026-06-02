@@ -62,7 +62,7 @@ export default function SimpleSidebar({ children }) {
             {/* Header del Drawer / Perfil de Usuario */}
             <Box sx={{
                 p: 3,
-                background: 'linear-gradient(135deg, #0d233a 0%, #1e3a8a 100%)',
+                background: '#1e3a8a',
                 color: '#ffffff',
                 display: 'flex',
                 flexDirection: 'column',
@@ -183,7 +183,7 @@ export default function SimpleSidebar({ children }) {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700, fontSize: { xs: '1rem', md: '1.25rem' } }}>
-                            Uniamazonia Reporta
+                            UniReportes
                         </Typography>
                     </Box>
                     <Typography variant="body2" sx={{ display: { xs: 'none', md: 'block' }, color: '#93c5fd', fontWeight: 500 }}>
