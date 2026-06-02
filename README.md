@@ -1,4 +1,6 @@
 Julian David Pajoy Guzmán
+
+Kevin Orlando Hurtado Perez
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
