@@ -6,6 +6,7 @@ import SimpleSidebar from '../../Components/Sidebar/Sidebar';
 import { Box, Container, Typography, Grid, Card, CardContent, CardActionArea } from '@mui/material';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AdminAccessCard from '../../Components/AdminAccessCard/AdminAccessCard';
+import { History } from '@mui/icons-material';
 
 const PanelAdmin = () => {
     const auth = getAuth();
@@ -23,16 +24,16 @@ const PanelAdmin = () => {
 
     const accesosAdmin = [
         {
-            titulo: 'Ver Estadísticas',
-            descripcion: 'Consulta gráficos interactivos de distribución de roles y tendencias del sistema.',
-            link: '/estadisticas',
-            icon: <BarChartIcon sx={{ fontSize: 40, color: '#1e40af' }} />,
+            titulo: 'Ver Incidentes',
+            descripcion: 'Consulta en forma de tabla todos los incidentes registrados en el sistema.',
+            link: '/incidentesadmin',
+            icon: <History sx={{ fontSize: 40, color: '#1e40af' }} />,
             bgColor: '#eff6ff'
         },
         {
-            titulo: 'Gestionar Incidencias',
-            descripcion: 'Gestionar los incidentes reportados por la comunidad universitaria.',
-            link: '/incidentesadmin',
+            titulo: 'Ver Estadísticas',
+            descripcion: 'Consulta gráficos interactivos de distribución de roles y tendencias del sistema.',
+            link: '/estadisticas',
             icon: <BarChartIcon sx={{ fontSize: 40, color: '#1e40af' }} />,
             bgColor: '#eff6ff'
         }
