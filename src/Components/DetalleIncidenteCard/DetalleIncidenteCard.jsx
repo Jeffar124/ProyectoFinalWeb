@@ -23,8 +23,9 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PersonIcon from '@mui/icons-material/Person';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import { ReactQRCode } from '@lglab/react-qr-code'
 
-const DetalleIncidenteCard = ({ incidente, renderEstadoBadge, formatFecha }) => {
+const DetalleIncidenteCard = ({ incidente, renderEstadoBadge, formatFecha, url }) => {
     const {
         id,
         usuarioId,
@@ -368,6 +369,7 @@ const DetalleIncidenteCard = ({ incidente, renderEstadoBadge, formatFecha }) => 
 
                     </Grid>
                 </Stack>
+                <ReactQRCode value={url}/>
             </CardContent>
         </Card>
     )

@@ -15,6 +15,8 @@ const DetalleIncidente = () => {
     const navigate = useNavigate()
     const { user } = useAuth()
     const [incidente, setIncidente] = useState(null)
+    const url = window.location.href;
+
 
     useEffect(() => {
         const obtenerIncidente = async () => {
@@ -24,6 +26,8 @@ const DetalleIncidente = () => {
                 setIncidente({ id: docSnap.id, ...docSnap.data() })
             }
         }
+        console.log(url);
+        
         obtenerIncidente()
     }, [id])
 
@@ -97,6 +101,7 @@ const DetalleIncidente = () => {
                     incidente={incidente}
                     renderEstadoBadge={renderEstadoBadge}
                     formatFecha={formatFecha}
+                    url={url}
                 />
             </Container>
         </SimpleSidebar>
